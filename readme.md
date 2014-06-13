@@ -1,0 +1,5 @@
+JSCache
+==============
+
+Javascript Caching Library
+--------------

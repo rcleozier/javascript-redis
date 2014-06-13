@@ -1,0 +1,23 @@
+<script src="jscache.js"> </script>
+<script>
+	var cache = new JSCache();
+	
+	console.log(cache.set('sample', "hello!!!"));
+	console.log(cache.doesExist('sample'));
+	console.log(cache.get('sample'));
+	console.log(cache.append('sample',' !! Hi'));
+	console.log(cache.get('sample'));
+	console.log(cache.rename('sample','sample2'));
+	console.log(cache.get('sample2'));
+	console.log(cache.get('sample'));
+	console.log(cache.isSupported());
+	console.log(cache.flush());
+	console.log(cache.getAllValues());
+	console.log(cache.set('sample', "hello!!!"));
+	console.log(cache.set('sample2', "Just added!!"));
+	console.log(cache.getAllValues());
+	console.log(cache.getAllKeys());
+	console.log(cache.whereKeyLike('sam'));
+	console.log(cache.remove('sample2'));
+	console.log(cache.refresh('sample'));
+</script>

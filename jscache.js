@@ -1,36 +1,60 @@
 var JSCache = function() {
 
   this.cacheNameSpace = "JSCache:";
+  this.expiration = 120; // In minutes
+
+  this.setNameSpace = function(namespace){
+
+    if (namespace.indexOf(":") = -1) {
+       namespace += ":";
+    }
+
+    this.cacheNameSpace = namespace;
+  };
 
   this.doesExist = function(key) {
     var cachedItem;
 
-    cachedItem = localStorage.getItem(this.cacheNameSpace + key, value);
+    cachedItem = localStorage.getItem(this.cacheNameSpace + key);
 
-    return ((typeof cachedItem != undefined ? true : false));
+    return ((cachedItem !== null ? true : false));
   };
 
   this.get = function(key) {
     var value;
 
-    value = localStorage.getItem(this.cacheNameSpace + key);
-    return value;
+    value = this.unstringify(localStorage.getItem(this.cacheNameSpace + key));
+    
+    if (value) {
+      if (this.isExpired(value.expiration)){
+        this.remove(key);
+        return false;
+      } 
+      return value.data;
+    } else{
+      return null;
+    }
   };
 
   this.mset = function(arrayOfObjects) {
-    for (var i = ; i < arrayOfObjects.length; i++) {
+    for (var i = 0; i < arrayOfObjects.length; i++) {
       this.set(arrayOfObjects[i].key, arrayOfObjects[i].value);
     }
   };
 
   this.set = function(key, value) {
-    var value;
+    var value, store = {};
 
     if (typeof value == "object") {
       value = this.stringify(value);
     }
 
-    return localStorage.setItem(this.cacheNameSpace + key, value);
+    store.data = value;
+    store.expiration = this.getExpirationDate();
+    store = this.stringify(store);
+
+     localStorage.setItem(this.cacheNameSpace + key, store);
+     return true;
   };
 
   this.flush = function() {
@@ -38,29 +62,46 @@ var JSCache = function() {
 
     for (i = 0, len = localStorage.length; i < len; ++i) {
       if (localStorage.key(i).indexOf(this.cacheNameSpace) != -1) {
-        this.remove(localStorage.key(i));
+        this.remove(this.stripNameSpace(localStorage.key(i)));
       }
     }
+
+    return true;
   };
 
-  this.refresh = function() {
+  this.refresh = function(key) {
+    var value;
 
+    value = this.get(key);
+    return this.set(key,value);
   };
 
   this.remove = function(key) {
-    return localStorage.removeItem(this.cacheNameSpace + key);
+     localStorage.removeItem(this.cacheNameSpace + key);
+     return true;
   };
 
-  this.setExpiration = function() {
+  this.setExpiration = function(expiration) {
+     this.expiration = expiration;
+  };
 
+  this.getExpirationDate = function(){
+    var expiration = new Date();
+    expiration.setMinutes(this.expiration);
+    return expiration;
+  };
+
+  this.isExpired = function(expiration){
+    var now = new Date('2013-05-23');
+    var expiration_date = new Date(expiration);
+
+    return now > expiration_date;
   };
 
   this.append = function(key, value) {
     var existing, newValue;
-
-    existing = this.get(key);
-
-    this.set(key, newValue);
+    newValue = this.get(key) + value;
+    return this.set(key, newValue);
   };
 
   this.rename = function(key, newKey) {
@@ -71,16 +112,54 @@ var JSCache = function() {
     return this.remove(key);
   };
 
-  this.persist = function(key) {
+  this.whereKeyLike = function(search) {
+    var matches = [];
 
+    for (i = 0, len = localStorage.length; i < len; ++i) {
+      if (localStorage.key(i).indexOf(this.cacheNameSpace) != -1 && localStorage.key(i).indexOf(search) != -1  ) {
+          matches.push(this.get(this.stripNameSpace(localStorage.key(i))));
+      }
+    }
+    return matches;
   };
 
-  this.whereKeyLike = function(key) {
+  this.randomKey = function(){
+    var keys, floor;
 
+    keys = this.getAllKeys();
+
+    if (keys.length > 0){
+      floor =  Math.floor(Math.random() * keys.length);
+      return keys[floor];
+    } else{
+      return false;
+    }
   };
 
-  this.getAll = function() {
-    return;
+  this.getAllKeys = function(){
+    var keys = [];
+
+     for (i = 0, len = localStorage.length; i < len; ++i) {
+      if (localStorage.key(i).indexOf(this.cacheNameSpace) != -1) {
+          keys.push(this.stripNameSpace(localStorage.key(i)));
+      }
+    }
+    return keys;
+  }
+
+  this.getAllValues = function() {
+    var dump = [];
+
+    for (i = 0, len = localStorage.length; i < len; ++i) {
+      if (localStorage.key(i).indexOf(this.cacheNameSpace) != -1) {
+          dump.push(this.get(this.stripNameSpace(localStorage.key(i))));
+      }
+    }
+    return dump;
+  };
+
+  this.stripNameSpace = function(key){
+     return key.replace(this.cacheNameSpace, '');
   };
 
   this.isSupported = function() {
@@ -93,5 +172,9 @@ var JSCache = function() {
 
   this.stringify = function(data) {
     return JSON.stringify(data);
+  };
+
+  this.unstringify = function(data) {
+    return JSON.parse(data);
   };
 };
