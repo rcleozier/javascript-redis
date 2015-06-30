@@ -1,0 +1,29 @@
+{
+    "name": "javascript-redis",
+    "version": "1.0.1",
+    "authors": [
+        "Robbins Cleozier <rcleozier@gmail.com>"
+    ],
+    "description": "A Redis like Javascript library\"",
+    "main": "jsredis.js",
+    "keywords": [
+        "localstorage",
+        "redis",
+        "javascript",
+        "caching",
+        "javascript",
+        "redis"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/rcleozier/javascript-redis.git"
+    }
+}
