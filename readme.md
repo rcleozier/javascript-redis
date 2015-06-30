@@ -1,13 +1,12 @@
-JSCache
+Javascript Redis Library
 =========
 
 A Redis Like Javascript Caching Library
 
   - Lightweight
   - Easy Installation
-  - Features expiration
-
-
+  - Features Expiration
+  
 #### Instantiation 
 ```javascript
    var cache = new JSCache();

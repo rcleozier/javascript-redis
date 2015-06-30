@@ -1,23 +1,29 @@
-<script src="jscache.js"> </script>
+<script src="jsredis.js"> </script>
 <script>
-	var cache = new JSCache();
+	var cache = new JSRedis();
 	
-	console.log(cache.set('sample', "hello!!!"));
-	console.log(cache.doesExist('sample'));
-	console.log(cache.get('sample'));
-	console.log(cache.append('sample',' !! Hi'));
-	console.log(cache.get('sample'));
+	console.log(cache.set('sample', "Hello!"));
+	console.log("Sample Key Exist?: " + cache.doesExist('sample'));
+	console.log("Sample2 Key Exist?: " + cache.doesExist('sample2'));
+	console.log("Sample Key Value: " + cache.get('sample'));
+	console.log(cache.append('sample',' How are you?'));
+	console.log("Sample Key Value After Apeending: " + cache.get('sample'));
 	console.log(cache.rename('sample','sample2'));
-	console.log(cache.get('sample2'));
-	console.log(cache.get('sample'));
-	console.log(cache.isSupported());
+	console.log("Sample Key Exist after rename: " + cache.get('sample'));
+	console.log("Sample2 Key Exist after rename: " + cache.get('sample2'));
+	console.log("Does browser Support: " + cache.isSupported());
+	console.log("Flushing Cache");
 	console.log(cache.flush());
+	console.log('Getting All Values');
 	console.log(cache.getAllValues());
 	console.log(cache.set('sample', "hello!!!"));
 	console.log(cache.set('sample2', "Just added!!"));
+	console.log('Getting All Values');
 	console.log(cache.getAllValues());
+	console.log('Getting All Keys');
 	console.log(cache.getAllKeys());
+	console.log('Wild Card Search');
 	console.log(cache.whereKeyLike('sam'));
-	console.log(cache.remove('sample2'));
-	console.log(cache.refresh('sample'));
+	console.log("Removing Key sample2: " + cache.remove('sample2'));
+	console.log("Refreshing Key sample2 " + cache.refresh('sample'));
 </script>

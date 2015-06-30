@@ -1,4 +1,4 @@
-var JSCache = function() {
+var JSRedis = function() {
 
   this.cacheNameSpace = "JSCache:";
   this.expiration = 120; // In minutes
@@ -92,7 +92,7 @@ var JSCache = function() {
   };
 
   this.isExpired = function(expiration){
-    var now = new Date('2013-05-23');
+    var now = new Date();
     var expiration_date = new Date(expiration);
 
     return now > expiration_date;
