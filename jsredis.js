@@ -1,6 +1,6 @@
 var JSRedis = function() {
 
-  this.cacheNameSpace = "JSCache:";
+  this.cacheNameSpace = "JSRedis:";
   this.expiration = 120; // In minutes
 
   this.setNameSpace = function(namespace){

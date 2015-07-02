@@ -9,7 +9,7 @@ A Redis Like Javascript Caching Library
   
 #### Instantiation 
 ```javascript
-   var cache = new JSCache();
+   var cache = new JSRedis();
 ```
 
 #### Storing data
@@ -42,7 +42,7 @@ A Redis Like Javascript Caching Library
   cache.doesExist('username');
 ```
 
-#### Checking if browser supports JSCache
+#### Checking if browser supports JSRedis
 ```javascript
   cache.isSupported();
 ```
